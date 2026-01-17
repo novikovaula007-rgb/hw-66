@@ -4,11 +4,17 @@ import Typography from '@mui/material/Typography';
 import {Box, IconButton} from "@mui/material";
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
-import type {IMealForm} from "../../types";
+import type {IMeal} from "../../types";
 import React from "react";
+import {NavLink} from "react-router-dom";
+
+interface Props extends IMeal {
+    deleteMeal: () => void;
+}
+
+const Meal: React.FC<Props> = ({name, calories, time, date, id, deleteMeal}) => {
 
 
-const Meal: React.FC<IMealForm> = ({name, calories, time, date}) => {
     return (
         <Card sx={
             {
@@ -33,10 +39,10 @@ const Meal: React.FC<IMealForm> = ({name, calories, time, date}) => {
                     </Typography>
                 </Box>
                 <Box sx={{margin: '0 5px'}}>
-                    <IconButton aria-label="delete">
+                    <IconButton aria-label="delete" onClick={deleteMeal}>
                         <DeleteIcon/>
                     </IconButton>
-                    <IconButton aria-label="edit">
+                    <IconButton aria-label="edit" component={NavLink} to={`/meals/${id}/edit`}>
                         <EditIcon/>
                     </IconButton>
                 </Box>

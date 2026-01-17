@@ -1,8 +1,8 @@
+import MealForm from "../../components/MealForm/MealForm.tsx";
+
 const AddMeal = () => {
     return (
-        <div>
-
-        </div>
+        <MealForm/>
     );
 };
 

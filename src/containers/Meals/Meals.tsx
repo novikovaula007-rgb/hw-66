@@ -4,10 +4,21 @@ import type {IMeal, IMealAPI} from "../../types";
 import axiosAPI from "../../axiosAPI.ts";
 import {Stack, Box} from "@mui/material";
 import Spinner from "../../components/UI/Spinner/Spinner.tsx";
+import { toast } from "react-toastify";
 
 const Meals = () => {
     const [meals, setMeals] = useState<IMeal[]>([])
     const [loading, setLoading] = useState<boolean>(false)
+
+    const deleteMeal = async (idMeal: string) => {
+        try {
+            await axiosAPI.delete(`/meals/${idMeal}.json`);
+            setMeals(prev => prev.filter(item => item.id !== idMeal))
+            toast.success('Meal successfully deleted')
+        } catch (e) {
+            console.log(e)
+        }
+    }
 
     const fetchMeals = useCallback(async () => {
         try {
@@ -48,13 +59,13 @@ const Meals = () => {
                             date={meal.date}
                             calories={meal.calories}
                             time={meal.time}
+                            id={meal.id}
+                            deleteMeal={() => deleteMeal(meal.id)}
                         />
                     })}
                 </Stack>
             }
         </Box>
-
-
     );
 }
 

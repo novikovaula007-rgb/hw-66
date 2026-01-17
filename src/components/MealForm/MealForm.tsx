@@ -10,7 +10,8 @@ import {
     Stack,
     TextField,
     type SelectChangeEvent,
-    Button
+    Button,
+    Typography
 } from "@mui/material";
 import type {IMealForm} from "../../types";
 import SaveIcon from '@mui/icons-material/Save';
@@ -25,8 +26,14 @@ const initialMealForm: IMealForm = {
     date: dayjs(),
 }
 
-const MealForm = () => {
-    const [form, setForm] = useState<IMealForm>(initialMealForm);
+interface Props {
+    isEditing?: boolean,
+    initialValueForm?: IMealForm,
+    mealID?: string,
+}
+
+const MealForm: React.FC<Props> = ({isEditing, initialValueForm = initialMealForm, mealID}) => {
+    const [form, setForm] = useState<IMealForm>(initialValueForm);
     const [loading, setLoading] = useState<boolean>(false);
     const navigate = useNavigate()
 
@@ -69,8 +76,12 @@ const MealForm = () => {
             } else if (!formSubmit.name || !formSubmit.time) {
                 toast.error('Fill in all fields.')
             } else {
-                await axiosAPI.post('/meals.json', {...formSubmit});
-                toast.success('You have successfully recorded your meal!');
+                if (isEditing && mealID) {
+                    await axiosAPI.put(`/meals/${mealID}.json`, {...formSubmit});
+                } else {
+                    await axiosAPI.post('/meals.json', {...formSubmit});
+                }
+                toast.success(`Meal ${isEditing ? 'edited' : 'added'} successfully!`);
                 setForm(initialMealForm)
                 navigate('/meals')
             }
@@ -84,6 +95,10 @@ const MealForm = () => {
 
     return (
         <Box component="form" onSubmit={onSubmit} sx={{maxWidth: 450, mx: 'auto', mt: 4}}>
+            <Typography variant='h4' sx={{textAlign: 'center', marginBottom: '15px'}}>
+                {isEditing ? 'Edit' : 'Add'} meal
+            </Typography>
+
             <Stack spacing={2}>
 
                 <TextField
@@ -136,7 +151,7 @@ const MealForm = () => {
                     loadingPosition='end'
                     variant='contained'
                     endIcon={<SaveIcon/>}>
-                    Add
+                    {isEditing ? 'Edit' : 'Add'}
                 </Button>
             </Stack>
         </Box>
