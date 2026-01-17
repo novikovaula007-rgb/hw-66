@@ -32,10 +32,18 @@ const MealForm = () => {
 
     const onInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement> | SelectChangeEvent) => {
         const {name, value} = e.target;
+        let valueForm: number | string = value
+
+        if (name === 'price') {
+            const valueCalories = Number(value)
+            if (valueCalories > 0) {
+                valueForm = valueCalories
+            }
+        }
 
         setForm((prevState) => ({
             ...prevState,
-            [name]: value
+            [name]: valueForm
         }));
     };
 
