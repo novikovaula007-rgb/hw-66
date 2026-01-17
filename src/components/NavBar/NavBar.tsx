@@ -13,7 +13,7 @@ const NavBar = () => {
                         Calorie tracker
                     </Typography>
 
-                    <Button color='inherit' to='/meal/add' component={NavLink}>Add</Button>
+                    <Button color='inherit' to='/meals/add' component={NavLink}>Add</Button>
                 </Toolbar>
             </AppBar>
         </Box>
