@@ -1,8 +1,9 @@
 const Meals = () => {
     return (
-        <div>
-        </div>
-    );
-};
+        <>
 
-export default Meals;
+        </>
+    );
+}
+
+export default Meals
