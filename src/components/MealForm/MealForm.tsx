@@ -68,6 +68,7 @@ const MealForm: React.FC<Props> = ({isEditing, initialValueForm = initialMealFor
 
             const formSubmit = {
                 ...form,
+                calories: Number(form.calories),
                 date: form.date.format('YYYY-MM-DD'),
             }
 
