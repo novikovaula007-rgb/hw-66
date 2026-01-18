@@ -4,7 +4,8 @@ import type {IMeal, IMealAPI} from "../../types";
 import axiosAPI from "../../axiosAPI.ts";
 import {Stack, Box, Typography} from "@mui/material";
 import Spinner from "../../components/UI/Spinner/Spinner.tsx";
-import { toast } from "react-toastify";
+import {toast} from "react-toastify";
+import dayjs from "dayjs";
 
 const Meals = () => {
     const [meals, setMeals] = useState<IMeal[]>([])
@@ -12,7 +13,11 @@ const Meals = () => {
     const [deleteId, setDeleteId] = useState<string | null>(null)
 
     const totalCalories = meals.reduce((totalSum, meal) => {
-        return totalSum + meal.calories;
+        if (meal.date === dayjs().format('YYYY-MM-DD')) {
+            return totalSum + meal.calories;
+        } else {
+            return totalSum
+        }
     }, 0)
 
     const deleteMeal = async (idMeal: string) => {
@@ -40,14 +45,15 @@ const Meals = () => {
                         id: idMeal
                     }
                 })
-                setMeals(mealsArray);
+                const sortedMeals = mealsArray.sort((a, b) => a.date.localeCompare(b.date)).reverse()
+                setMeals(sortedMeals);
             }
         } catch (e) {
             console.log(e)
         } finally {
             setLoading(false)
         }
-    },[])
+    }, [])
 
     useEffect(() => {
         void fetchMeals()
@@ -55,7 +61,8 @@ const Meals = () => {
 
     return (
         <Box>
-            <Typography variant="h5" color="primary" fontWeight="bold" sx={{marginBottom: '15px'}}>Total calories: {totalCalories}</Typography>
+            <Typography variant="h5" color="primary" fontWeight="bold" sx={{marginBottom: '15px'}}>Total
+                calories: {totalCalories}</Typography>
             {!loading && meals.length === 0 && 'Not meals yet.'}
             {loading && <Spinner/>}
             {!loading &&

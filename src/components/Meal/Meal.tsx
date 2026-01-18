@@ -15,8 +15,6 @@ interface Props extends IMeal {
 }
 
 const Meal: React.FC<Props> = ({name, calories, time, date, id, deleteMeal, loading}) => {
-
-
     return (
         <Card sx={
             {
