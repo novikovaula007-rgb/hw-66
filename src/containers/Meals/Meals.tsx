@@ -9,6 +9,7 @@ import { toast } from "react-toastify";
 const Meals = () => {
     const [meals, setMeals] = useState<IMeal[]>([])
     const [loading, setLoading] = useState<boolean>(false)
+    const [deleteId, setDeleteId] = useState<string | null>(null)
 
     const totalCalories = meals.reduce((totalSum, meal) => {
         return totalSum + meal.calories;
@@ -16,11 +17,14 @@ const Meals = () => {
 
     const deleteMeal = async (idMeal: string) => {
         try {
+            setDeleteId(idMeal)
             await axiosAPI.delete(`/meals/${idMeal}.json`);
             setMeals(prev => prev.filter(item => item.id !== idMeal))
             toast.success('Meal successfully deleted')
         } catch (e) {
             console.log(e)
+        } finally {
+            setDeleteId(null)
         }
     }
 
@@ -64,6 +68,7 @@ const Meals = () => {
                             calories={meal.calories}
                             time={meal.time}
                             id={meal.id}
+                            loading={deleteId === meal.id}
                             deleteMeal={() => deleteMeal(meal.id)}
                         />
                     })}
